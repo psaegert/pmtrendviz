@@ -1,0 +1,10 @@
+build/
+logs/
+dev/
+images/
+documentation/
+.git/
+.venv/
+.mypy_cache/
+.pytest_cache/
+pmtrendviz-frontend/

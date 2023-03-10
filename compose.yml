@@ -1,0 +1,39 @@
+version: "3.9" # not required
+
+services:
+  es01: # service name (also used as host name)
+    image: elasticsearch:7.17.6
+    env_file:
+      - elasticsearch/es.env
+    environment: # (see https://www.elastic.co/guide/en/elasticsearch/reference/7.17/docker.html)
+      - discovery.type=single-node # single-node cluster
+      - bootstrap.memory_lock=true # disable swapping
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+      - xpack.security.enabled=true # enable security/basic authentication
+      - node.name=es01
+      - cluster.name=es-docker-single-cluster
+      # required for the elasticvue UI (see https://elasticvue.com/usage)
+      - http.cors.enabled=true
+      - http.cors.allow-origin=http://localhost:8080
+      - http.cors.allow-headers=X-Requested-With,Content-Type,Content-Length,Authorization
+    ulimits:
+      memlock: # disables swapping (see https://www.elastic.co/guide/en/elasticsearch/reference/7.17/docker.html)
+        soft: -1
+        hard: -1
+    volumes:
+      - esdata01:/usr/share/elasticsearch/data # persist elasticsearch data
+    ports:
+      - 9200:9200 # make port 9200 accessible for the host
+    deploy:
+      resources:
+        limits:
+          memory: 4g # limit memory usage
+
+  elasticvue: # service name (also used as host name)
+    # to use it, port 9200 of es01 must be published
+    image: cars10/elasticvue:0.42.1
+    ports:
+      - 8080:8080 # make port 8080 accessible for the host
+
+volumes:
+  esdata01: # use default volume settings
