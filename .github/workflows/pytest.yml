@@ -1,0 +1,58 @@
+on:
+  push:
+    branches: main
+    paths:
+      - "**.py"
+  pull_request:
+    paths:
+      - "**.py"
+
+name: pytest
+
+jobs:
+  pytest:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Checkout the repository
+      - uses: actions/checkout@v3.3.0
+
+      # Setup Python
+      - name: Setup Python 3.10
+        uses: actions/setup-python@v4.5.0
+        with:
+          python-version: "3.10"
+
+      # Install the package and development requirements
+      - name: Install package and development requirements
+        run: |
+          python -m pip install --upgrade pip
+          pip install -e .
+          pip install -r requirements_dev.txt
+
+      # Start Elasticsearch
+      # Use docker compose v2, which prevents this error:
+      # "ERROR: The Compose file './docker-compose.yml' is invalid because:
+      # 'name' does not match any of the regexes: '^x-'
+      - name: docker compose up
+        run: |
+          docker compose up -d es01
+
+      # Repeatedly check for connectivity to Elasticsearch until it's ready
+      # This takes about 20s
+      - name: Wait for Elasticsearch to come online
+        run: |
+          echo "Waiting for Elasticsearch..."
+          while ! curl -s -o /dev/null -w "%{http_code}" http://localhost:9200 --user elastic:1234; do
+            sleep 1
+          done
+
+      # Echo the Elasticsearch info
+      - name: Elasticsearch info
+        run: |
+          curl http://localhost:9200 --user elastic:1234
+
+      # Run the tests
+      - name: Run tests
+        run: |
+          pytest
