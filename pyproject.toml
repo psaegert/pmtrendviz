@@ -1,0 +1,66 @@
+[project]
+name = "pmtrendviz"
+description = "Unsupervised Discovery Of Trends In Biomedical Research Based On The PubMed Baseline Repository"
+authors = [
+    {name = "Paul Saegert"},
+    {name = "Philipp Steichen"}
+    ]
+readme = "README.md"
+requires-python = ">=3.10"
+dynamic = ["dependencies"]
+version = "0.1.0"
+urls = { Github = "https://github.com/psaegert/pmtrendviz"}
+
+
+[project.scripts]
+pmtrendviz = "pmtrendviz.__main__:main"
+
+
+[tool.setuptools.dynamic]
+dependencies = {file = ["requirements.txt"]}
+
+
+[tool.setuptools]
+include-package-data = true
+
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+
+[build-system]
+requires = [
+    "setuptools>=42",
+    "wheel",
+    "platformdirs==2.6.2",
+]
+build-backend = "setuptools.build_meta"
+
+
+[tool.flake8]
+ignore = ["E501"]
+exclude = [
+    ".git",
+	"__pycache__",
+	"documentation",
+	"build",
+	"venv",
+	".venv",
+	"env",
+	".env",
+	"images",
+]
+
+
+[tool.mypy]
+no_implicit_optional = false
+disallow_untyped_defs = true
+disallow_incomplete_defs = true
+explicit_package_bases = true
+exclude = ".venv"
+ignore_missing_imports = true
+
+[tool.isort]
+multi_line_output = 2
+line_length = 100
+

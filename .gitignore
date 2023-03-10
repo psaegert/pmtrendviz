@@ -1,0 +1,38 @@
+# Zone.Identifier files
+*Zone.Identifier
+
+# Python Bytecode
+__pycache__/
+
+# Package Files
+*.egg-info
+build/
+
+# Cache
+cache/
+
+# Package data
+**/data/
+
+# Mypy cache
+.mypy_cache/
+
+logs/
+
+# Model files
+**/models/saved/
+
+# PyCharm
+.idea/
+# VSCode
+.vscode/
+
+# Virtual Environmentns
+venv/
+env/
+.venv/
+.env/
+ENV/
+
+# gitattributes (to preserve user changes such as git smudge and clean filters)
+.gitattributes
