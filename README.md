@@ -16,7 +16,6 @@
 1. [Getting Started](#getting-started)
 1. [Usage](#usage)
 2. [Development](#development)
-3. [Team Members](#team-members)
 
 
 # Introduction
